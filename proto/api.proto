@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package api.v1;
+
+option go_package = "github.com/charconstpointer/ihateannotations/gen/api/v1;apiv1";
+
+service Api {
+    rpc Foo(FooRequest) returns (FooResponse) {}
+}
+
+message FooRequest {}
+
+message FooResponse {}
