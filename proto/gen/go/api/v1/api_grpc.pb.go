@@ -39,21 +39,19 @@ func (c *apiServiceClient) Foo(ctx context.Context, in *FooRequest, opts ...grpc
 }
 
 // ApiServiceServer is the server API for ApiService service.
-// All implementations must embed UnimplementedApiServiceServer
+// All implementations should embed UnimplementedApiServiceServer
 // for forward compatibility
 type ApiServiceServer interface {
 	Foo(context.Context, *FooRequest) (*FooResponse, error)
-	mustEmbedUnimplementedApiServiceServer()
 }
 
-// UnimplementedApiServiceServer must be embedded to have forward compatible implementations.
+// UnimplementedApiServiceServer should be embedded to have forward compatible implementations.
 type UnimplementedApiServiceServer struct {
 }
 
 func (UnimplementedApiServiceServer) Foo(context.Context, *FooRequest) (*FooResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Foo not implemented")
 }
-func (UnimplementedApiServiceServer) mustEmbedUnimplementedApiServiceServer() {}
 
 // UnsafeApiServiceServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to ApiServiceServer will

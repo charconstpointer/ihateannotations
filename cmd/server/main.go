@@ -23,13 +23,8 @@ func main() {
 }
 
 type Server struct {
-	apiv1.UnimplementedApiServiceServer
 }
 
 func (s Server) Foo(ctx context.Context, request *apiv1.FooRequest) (*apiv1.FooResponse, error) {
 	return &apiv1.FooResponse{}, nil
-}
-
-func (s Server) mustEmbedUnimplementedApiServiceServer() {
-	s.mustEmbedUnimplementedApiServiceServer()
 }
