@@ -37,6 +37,28 @@
           "ApiService"
         ]
       }
+    },
+    "/v1/random/int": {
+      "get": {
+        "operationId": "ApiService_RandomInt",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RandomIntResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "ApiService"
+        ]
+      }
     }
   },
   "definitions": {
@@ -72,6 +94,15 @@
       "properties": {
         "message": {
           "type": "string"
+        }
+      }
+    },
+    "v1RandomIntResponse": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "format": "int64"
         }
       }
     }

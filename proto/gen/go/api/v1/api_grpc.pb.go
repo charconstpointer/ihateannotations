@@ -19,6 +19,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ApiServiceClient interface {
 	Foo(ctx context.Context, in *FooRequest, opts ...grpc.CallOption) (*FooResponse, error)
+	RandomInt(ctx context.Context, in *RandomIntRequest, opts ...grpc.CallOption) (*RandomIntResponse, error)
 }
 
 type apiServiceClient struct {
@@ -38,11 +39,21 @@ func (c *apiServiceClient) Foo(ctx context.Context, in *FooRequest, opts ...grpc
 	return out, nil
 }
 
+func (c *apiServiceClient) RandomInt(ctx context.Context, in *RandomIntRequest, opts ...grpc.CallOption) (*RandomIntResponse, error) {
+	out := new(RandomIntResponse)
+	err := c.cc.Invoke(ctx, "/api.v1.ApiService/RandomInt", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ApiServiceServer is the server API for ApiService service.
 // All implementations should embed UnimplementedApiServiceServer
 // for forward compatibility
 type ApiServiceServer interface {
 	Foo(context.Context, *FooRequest) (*FooResponse, error)
+	RandomInt(context.Context, *RandomIntRequest) (*RandomIntResponse, error)
 }
 
 // UnimplementedApiServiceServer should be embedded to have forward compatible implementations.
@@ -51,6 +62,9 @@ type UnimplementedApiServiceServer struct {
 
 func (UnimplementedApiServiceServer) Foo(context.Context, *FooRequest) (*FooResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Foo not implemented")
+}
+func (UnimplementedApiServiceServer) RandomInt(context.Context, *RandomIntRequest) (*RandomIntResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RandomInt not implemented")
 }
 
 // UnsafeApiServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -82,6 +96,24 @@ func _ApiService_Foo_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ApiService_RandomInt_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RandomIntRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApiServiceServer).RandomInt(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.v1.ApiService/RandomInt",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApiServiceServer).RandomInt(ctx, req.(*RandomIntRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ApiService_ServiceDesc is the grpc.ServiceDesc for ApiService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -92,6 +124,10 @@ var ApiService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Foo",
 			Handler:    _ApiService_Foo_Handler,
+		},
+		{
+			MethodName: "RandomInt",
+			Handler:    _ApiService_RandomInt_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

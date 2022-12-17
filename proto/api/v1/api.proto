@@ -12,6 +12,18 @@ service ApiService {
             get: "/v1/foo"
         };
     }
+    rpc RandomInt(RandomIntRequest) returns (RandomIntResponse){
+        option (google.api.http) = {
+            get: "/v1/random/int"
+        };
+    }
+}
+
+
+message RandomIntRequest{} 
+
+message RandomIntResponse{
+    int64 value = 1;
 }
 
 message FooRequest {}
