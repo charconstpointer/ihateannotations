@@ -9,13 +9,14 @@ import "google/api/annotations.proto";
 service ApiService {
     rpc Foo(FooRequest) returns (FooResponse) {
         option (google.api.http) = {
-            post: "/v1/foo"
-            body: "*"
+            get: "/v1/foo"
         };
     }
 }
 
 message FooRequest {}
 
-message FooResponse {}
+message FooResponse {
+    string message = 1;
+}
 
