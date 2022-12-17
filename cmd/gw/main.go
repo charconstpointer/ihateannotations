@@ -3,13 +3,16 @@ package main
 import (
 	"context"
 	"flag"
-	apiv1 "github.com/charconstpointer/ihateannotations/proto/gen/go/api/v1"
-	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 	"log"
 	"net/http"
 	"strings"
+
+	apiv1 "github.com/charconstpointer/ihateannotations/proto/gen/go/api/v1"
+	v1 "github.com/charconstpointer/ihateannotations/proto/gen/openapiv2/api/v1"
+	"github.com/flowchartsman/swaggerui"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 var (
@@ -37,6 +40,7 @@ func main() {
 	gmux := runtime.NewServeMux()
 	mux := http.NewServeMux()
 	mux.Handle("/", gmux)
+	mux.Handle("/swagger/", http.StripPrefix("/swagger", swaggerui.Handler(v1.SwaggerSpec)))
 
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 	err := apiv1.RegisterApiServiceHandlerFromEndpoint(ctx, gmux, *grpcServerEndpoint, opts)
