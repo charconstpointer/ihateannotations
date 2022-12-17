@@ -32,7 +32,7 @@ func (s *Server) Foo(ctx context.Context, request *apiv1.FooRequest) (*apiv1.Foo
 }
 
 func (s *Server) RandomInt(context.Context, *apiv1.RandomIntRequest) (*apiv1.RandomIntResponse, error) {
-	rand.Seed(time.Now().Unix())
+	rand.Seed(time.Now().UnixNano())
 	n := rand.Int63()
 	return &apiv1.RandomIntResponse{
 		Value: n,
